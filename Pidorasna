@@ -1,0 +1,146 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomUI"
+screenGui.Parent = playerGui
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 300, 0, 400) -- Увеличенный размер
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10) -- Закругленные углы
+uiCorner.Parent = mainFrame
+
+local titleBar = Instance.new("Frame")
+titleBar.Name = "TitleBar"
+titleBar.Size = UDim2.new(1, 0, 0, 40)
+titleBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+titleBar.Parent = mainFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, -60, 1, 0)
+titleLabel.Position = UDim2.new(0, 10, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Lordihub G"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.TextSize = 18
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Parent = titleBar
+
+local titleBarCorner = Instance.new("UICorner")
+titleBarCorner.CornerRadius = UDim.new(0, 10) -- Закругленные углы для фрейма с названием
+titleBarCorner.Parent = titleBar
+
+local hideButton = Instance.new("TextButton")
+hideButton.Name = "HideButton"
+hideButton.Size = UDim2.new(0, 30, 0, 30)
+hideButton.Position = UDim2.new(1, -60, 0, 5)
+hideButton.BackgroundTransparency = 1
+hideButton.Text = "-"
+hideButton.TextColor3 = Color3.new(1, 1, 1)
+hideButton.TextSize = 24
+hideButton.Font = Enum.Font.GothamBold
+hideButton.Parent = titleBar
+
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.BackgroundTransparency = 1
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.TextSize = 18
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Parent = titleBar
+
+local contentFrame = Instance.new("Frame")
+contentFrame.Name = "ContentFrame"
+contentFrame.Size = UDim2.new(1, 0, 1, -40)
+contentFrame.Position = UDim2.new(0, 0, 0, 40)
+contentFrame.BackgroundTransparency = 1
+contentFrame.Parent = mainFrame
+
+local uiGridLayout = Instance.new("UIGridLayout")
+uiGridLayout.CellSize = UDim2.new(0, 120, 0, 40)
+uiGridLayout.CellPadding = UDim2.new(0, 10, 0, 10)
+uiGridLayout.FillDirectionMaxCells = 2 -- Две кнопки в одном ряду
+uiGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+uiGridLayout.VerticalAlignment = Enum.VerticalAlignment.Top
+uiGridLayout.Parent = contentFrame
+
+local function createButton(text, script)
+    local button = Instance.new("TextButton")
+    button.Name = text .. "Button"
+    button.Size = UDim2.new(0, 120, 0, 40)
+    button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    button.Text = text
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.TextSize = 16
+    button.Font = Enum.Font.GothamSemibold
+    button.Parent = contentFrame
+
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 6)
+    buttonCorner.Parent = button
+
+    -- Add event listener for mouse click
+    button.MouseButton1Click:Connect(script)
+
+    return button
+end
+
+local function hideUI()
+    local hideTween = TweenService:Create(mainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 300, 0, 40)})
+    hideTween:Play()
+    contentFrame.Visible = false
+    hideButton.Text = "+"
+end
+
+local function showUI()
+    local showTween = TweenService:Create(mainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 300, 0, 400)})
+    showTween:Play()
+    contentFrame.Visible = true
+    hideButton.Text = "-"
+end
+
+hideButton.MouseButton1Click:Connect(function()
+    if contentFrame.Visible then
+        hideUI()
+    else
+        showUI()
+    end
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Example usage of the createButton function with a script
+local button1Script = function()
+    print("Button 1 clicked!")
+end
+createButton("Button 1", button1Script)
+
+local button2Script = function()
+    print("Button 2 clicked!")
+end
+createButton("Button 2", button2Script)
+
+local button3Script = function()
+    print("Button 3 clicked!")
+end
+createButton("Button 3", button3Script)
+
+local button4Script = function()
+    print("Button 4 clicked!")
+end
+createButton("Button 4", button4Script)
